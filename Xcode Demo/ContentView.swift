@@ -1,30 +1,27 @@
 //
 //  ContentView.swift
-//  Xcode Demo
+//  BlossomMovie
 //
-//  Created by shaban shaikh on 30/11/25.
+//  Created by Carlos Valentin on 11/7/24.
 //
 
 import SwiftUI
-
+ 
 struct ContentView: View {
     var body: some View {
         TabView{
-            Tab(Constants.homeString, systemImage: Constants.homeIconString){
+            Tab(Constants.homeString,systemImage: Constants.homeIconString){
                 HomeView()
             }
-            Tab(Constants.upcomingString, systemImage: Constants.upcomingIconString){
-                Text(Constants.upcomingString)
+            Tab(Constants.upcomingString,systemImage: Constants.upcomingIconString){
+                UpcomingView()
             }
-            Tab(Constants.searchString, systemImage: Constants.searchIconString){
-                Text(Constants.searchString)
+            Tab(Constants.searchString,systemImage: Constants.searchIconString){
+                SearchView()
             }
-            Tab(Constants.downloadString, systemImage: Constants.downloadIconString){
-                Text(Constants.downloadString)
+            Tab(Constants.downloadString,systemImage: Constants.downloadIconString){
+                DownloadView()
             }
-        }
-       
-            
         }
     }
 }

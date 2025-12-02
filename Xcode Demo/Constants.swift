@@ -1,8 +1,8 @@
 //
 //  Constants.swift
-//  Xcode Demo
+//  BlossomMovie
 //
-//  Created by shaban shaikh on 30/11/25.
+//  Created by Carlos Valentin on 11/10/24.
 //
 
 import Foundation
@@ -11,38 +11,41 @@ import SwiftUI
 struct Constants {
     static let homeString = "Home"
     static let upcomingString = "Upcoming"
-    static let downloadString = "Download"
     static let searchString = "Search"
-    static let trendingMovie = "Trending Movies"
-    static let trendingTV = "Trending TV"
-    static let topRatedMovie = "Top Rated Movies"
-    static let topRatedTV = "Top Rated TV"
-    
-    
-    static let testTitleURL = "https://image.tmdb.org/t/p/w500/nnl6OWkyPpuMm595hmAxNW3rZFn.jpg"
-//    static let testTitleURL = "https://image.tmdb.org/t/p/w500/nnl6OWkyPpuMm595hmAxNW3rZFn.jpg"
-    static let testTitleURL2 = "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
-    static let testTitleURL3 = "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+    static let downloadString = "Download"
+    static let playString = "Play"
+    static let trendingMovieString = "Trending Movies"
+    static let trendingTVString = "Trending TV"
+    static let topRatedMovieString = "Top Rated Movies"
+    static let topRatedTVString = "Top Rated TV"
+    static let movieSearchString = "Movie Search"
+    static let tvSearchString = "TV Search"
+    static let moviePlaceHolderString = "Search for a Movie"
+    static let tvPlaceHolderString = "Search for a TV Show"
+
     static let homeIconString = "house"
     static let upcomingIconString = "play.circle"
-    static let downloadIconString = "arrow.down.to.line.circle"
     static let searchIconString = "magnifyingglass"
-    static let playString = "Play"
-    static let ddownloadString = "Download"
+    static let downloadIconString = "arrow.down.to.line"
+    static let tvIconString = "tv"
+    static let movieIconString = "movieclapper"
+    
+    static let testTitleURL = "https://image.tmdb.org/t/p/w500/nnl6OWkyPpuMm595hmAxNW3rZFn.jpg"
+    static let testTitleURL2 = "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
+    static let testTitleURL3 = "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
     
     static let posterURLStart = "https://image.tmdb.org/t/p/w500"
     
-    static func addPosterPath(to titles: inout[Title]){
+    static func addPosterPath(to titles: inout[Title]) {
         for index in titles.indices {
             if let path = titles[index].posterPath {
-                titles[index].posterPath =  Constants.posterURLStart + path
+                titles[index].posterPath = Constants.posterURLStart + path
             }
         }
     }
-    
-  
 }
-enum YoutubeURLStrings :String {
+
+enum YoutubeURLStrings: String {
     case trailer = "trailer"
     case queryShorten = "q"
     case space = " "
@@ -50,20 +53,20 @@ enum YoutubeURLStrings :String {
 }
 
 extension Text {
-    func ghostButton()-> some View {
+    func ghostButton() -> some View {
         self
             .frame(width: 100, height: 50)
             .foregroundStyle(.buttonText)
             .bold()
-            .background(
+            .background {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .stroke(.buttonBorder,lineWidth: 5)
-            )
+            }
     }
 }
 
 extension Text {
-    func errorMessage()-> some View {
+    func errorMessage() -> some View {
         self
             .foregroundStyle(.red)
             .padding()
@@ -71,3 +74,8 @@ extension Text {
             .clipShape(.rect(cornerRadius: 10))
     }
 }
+
+
+
+
+    

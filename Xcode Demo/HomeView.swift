@@ -1,54 +1,89 @@
 //
 //  HomeView.swift
-//  Xcode Demo
+//  BlossomMovie
 //
-//  Created by shaban shaikh on 30/11/25.
+//  Created by Carlos Valentin on 11/22/24.
 //
 
 import SwiftUI
 
 struct HomeView: View {
-    var heroTestTitle = Constants.testTitleURL
-         
-    var body:some View {
-        GeometryReader {
-            geo in
-            ScrollView {
-                LazyVStack
-                {
-                    AsyncImage(url: URL(string: heroTestTitle)){
-                        image in image
-                            .resizable()
-                            .scaledToFit()
-                            .overlay(
-                                LinearGradient(
-                                    stops: [Gradient.Stop(color: .clear, location: 0.8),
-                                            Gradient.Stop(color: .gradient, location: 1)],
-                                    startPoint: .top,
-                                    endPoint: .bottom)
-                            )
-                    }placeholder: {
+    
+    let viewModel = ViewModel()
+    @State private var titleDetailPath = NavigationPath()
+    @Environment(\.modelContext) var modelContext
+    
+    var body: some View {
+        NavigationStack(path: $titleDetailPath) {
+            GeometryReader { geo in
+                ScrollView(.vertical) {
+                    switch viewModel.homeStatus {
+                    case .notStarted:
+                        EmptyView()
+                    case .fetching:
                         ProgressView()
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height * 0.85)
-                    HStack {
-                        Button{
+                            .frame(width: geo.size.width, height: geo.size.height)
+                    case .success:
+                        LazyVStack {
+                            AsyncImage(url: URL(string: viewModel.heroTitle.posterPath ?? "")){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .overlay {
+                                        LinearGradient(
+                                            stops: [Gradient.Stop(color: .clear, location: 0.8),
+                                                    Gradient.Stop(color: .gradient, location: 1)],
+                                            startPoint: .top,
+                                            endPoint: .bottom)
+                                    }
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: geo.size.width, height: geo.size.height * 0.85)
                             
-                        }label: {
-                            Text(Constants.playString)
-                                .ghostButton()
-                        }
-                        Button{
+                            HStack {
+                                Button {
+                                    titleDetailPath.append(viewModel.heroTitle)
+                                } label: {
+                                    Text(Constants.playString)
+                                        .ghostButton()
+                                }
+                                
+                                Button {
+                                    modelContext.insert(viewModel.heroTitle)
+                                    try? modelContext.save()
+                                } label: {
+                                    Text(Constants.downloadString)
+                                        .ghostButton()
+                                    
+                                }
+                            }
                             
-                        }label: {
-                            Text(Constants.ddownloadString)
-                                .ghostButton()
+                            HorizontalListView(header: Constants.trendingMovieString, titles: viewModel.trendingMovies) { title in
+                                titleDetailPath.append(title)
+                            }
+                            HorizontalListView(header: Constants.trendingTVString, titles: viewModel.trendingTV) { title in
+                                titleDetailPath.append(title)
+                            }
+                            HorizontalListView(header: Constants.topRatedMovieString, titles: viewModel.topRatedMovies) { title in
+                                titleDetailPath.append(title)
+                            }
+                            HorizontalListView(header: Constants.topRatedTVString, titles: viewModel.topRatedTV) { title in
+                                titleDetailPath.append(title)
+                            }
                         }
+                       
+                    case .failed(let error):
+                        Text(error.localizedDescription)
+                            .errorMessage()
+                            .frame(width: geo.size.width, height: geo.size.height)
                     }
-                    HorizontalListView(header: Constants.trendingMovie)
-                    HorizontalListView(header: Constants.trendingTV)
-                    HorizontalListView(header: Constants.topRatedTV)
-                    HorizontalListView(header: Constants.topRatedMovie)
+                }
+                .task {
+                    await viewModel.getTitles()
+                }
+                .navigationDestination(for: Title.self) { title in
+                    TitleDetailView(title: title)
                 }
             }
         }
@@ -58,3 +93,5 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
+
+
