@@ -30,8 +30,25 @@ struct Constants {
     static let playString = "Play"
     static let ddownloadString = "Download"
     
+    static let posterURLStart = "https://image.tmdb.org/t/p/w500"
+    
+    static func addPosterPath(to titles: inout[Title]){
+        for index in titles.indices {
+            if let path = titles[index].posterPath {
+                titles[index].posterPath =  Constants.posterURLStart + path
+            }
+        }
+    }
+    
   
 }
+enum YoutubeURLStrings :String {
+    case trailer = "trailer"
+    case queryShorten = "q"
+    case space = " "
+    case key = "key"
+}
+
 extension Text {
     func ghostButton()-> some View {
         self
@@ -42,5 +59,15 @@ extension Text {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .stroke(.buttonBorder,lineWidth: 5)
             )
+    }
+}
+
+extension Text {
+    func errorMessage()-> some View {
+        self
+            .foregroundStyle(.red)
+            .padding()
+            .background(.ultraThinMaterial)
+            .clipShape(.rect(cornerRadius: 10))
     }
 }
